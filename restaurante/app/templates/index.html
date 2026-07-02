@@ -1,0 +1,26 @@
+{% extends "base.html" %} {% block conteudo %}
+<div class="hero">
+  <h1>B BURGER</h1>
+  <p>
+    Gestão completa de comandas, cardápio e pagamentos — do pedido ao recibo.
+  </p>
+  <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg"
+    >Entrar no sistema</a
+  >
+</div>
+
+<div class="cards">
+  <div class="card">
+    <h3>Cardápio</h3>
+    <p>Consulte itens, preços e disponibilidade em tempo real.</p>
+  </div>
+  <div class="card">
+    <h3>Comandas</h3>
+    <p>Abra, edite e acompanhe comandas do pedido até o fechamento.</p>
+  </div>
+  <div class="card">
+    <h3>Pagamento</h3>
+    <p>Liquide comandas com cálculo automático de troco e comprovante.</p>
+  </div>
+</div>
+{% endblock %}

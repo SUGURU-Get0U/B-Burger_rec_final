@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>B-Burger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <nav>
+      <strong>B-Burger</strong>
+      <div>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('cardapio.index') }}">Cardápio</a>
+        <a href="{{ url_for('comanda.index') }}">Comandas</a>
+        {% if current_user.papel == 'admin' %}
+        <a href="{{ url_for('admin.clientes') }}">Clientes</a>
+        <a href="{{ url_for('admin.funcionarios') }}">Funcionários</a>
+        <a href="{{ url_for('admin.cardapio') }}">Admin Cardápio</a>
+        {% endif %}
+        <span class="nav-user">
+          {{ current_user.nome }} ({{ current_user.papel }})
+        </span>
+        <a href="{{ url_for('auth.logout') }}">Sair</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <div class="container">
+      {% for categoria, mensagem in get_flashed_messages(with_categories=true)
+      %}
+      <div class="flash-{{ categoria }}">{{ mensagem }}</div>
+      {% endfor %} {% block conteudo %}{% endblock %}
+    </div>
+  </body>
+</html>

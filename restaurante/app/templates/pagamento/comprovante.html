@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<h2>Comprovante — Comanda #{{ comanda.codigo }}</h2>
+
+<table class="tabela mb-1">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Qtd</th>
+      <th>Preço unit.</th>
+      <th>Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in comanda.itens %}
+    <tr>
+      <td>{{ item.nome }}</td>
+      <td>{{ item.quantidade }}</td>
+      <td>R$ {{ "%.2f"|format(item.preco_unitario) }}</td>
+      <td>R$ {{ "%.2f"|format(item.subtotal) }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p><strong>Total: R$ {{ "%.2f"|format(comanda.total) }}</strong></p>
+
+{% if comanda.pagamento %}
+<hr class="separador">
+<p>Forma de pagamento: <strong>{{ comanda.pagamento.forma_pagamento }}</strong></p>
+<p>Valor recebido: <strong>R$ {{ "%.2f"|format(comanda.pagamento.valor_recebido) }}</strong></p>
+<p>Troco: <strong>R$ {{ "%.2f"|format(comanda.pagamento.troco) }}</strong></p>
+{% endif %}
+
+<br>
+<a href="{{ url_for('comanda.index') }}">← Voltar para comandas</a>
+{% endblock %}

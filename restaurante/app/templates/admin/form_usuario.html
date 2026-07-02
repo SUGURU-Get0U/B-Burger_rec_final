@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<h2>{{ titulo }}</h2>
+<form method="POST" action="{{ action }}">
+  <div class="campo">
+    <label>Nome</label>
+    <input type="text" name="nome" value="{{ usuario.nome if usuario else '' }}" required class="input">
+  </div>
+  <div class="campo">
+    <label>E-mail</label>
+    <input type="email" name="email" value="{{ usuario.email if usuario else '' }}" required class="input">
+  </div>
+  {% if not usuario %}
+  <div class="campo">
+    <label>Senha</label>
+    <input type="password" name="senha" required class="input">
+  </div>
+  {% endif %}
+  <button type="submit" class="btn btn-primary">Salvar</button>
+  <a href="{{ url_for('admin.clientes') }}" class="ml-2">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<h2>Dashboard</h2>
+<p>Bem-vindo, <strong>{{ current_user.nome }}</strong>!</p>
+<p>Seu papel no sistema: <strong>{{ current_user.papel }}</strong></p>
+{% endblock %}

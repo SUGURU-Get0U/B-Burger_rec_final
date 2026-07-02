@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<h2>Comanda #{{ comanda.codigo }}</h2>
+<p>Estado: <strong>{{ comanda.estado }}</strong>
+{% if comanda.estado == 'fechada' and current_user.papel == 'admin' %}
+  <span class="texto-aviso-pequeno">(você pode editar como administrador)</span>
+{% endif %}
+</p>
+
+{% set pode_editar = comanda.estado == 'aberta' or (comanda.estado == 'fechada' and current_user.papel == 'admin') %}
+
+<!-- Itens da comanda -->
+{% if comanda.itens %}
+<table class="tabela mb-1">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Qtd</th>
+      <th>Preço unit.</th>
+      <th>Subtotal</th>
+      {% if pode_editar %}<th></th>{% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in comanda.itens %}
+    <tr>
+      <td>{{ item.nome }}</td>
+      <td>{{ item.quantidade }}</td>
+      <td>R$ {{ "%.2f"|format(item.preco_unitario) }}</td>
+      <td>R$ {{ "%.2f"|format(item.subtotal) }}</td>
+      {% if pode_editar %}
+      <td>
+        <form method="POST"
+              action="{{ url_for('comanda.remover_item', id=comanda.id, item_cardapio_id=item.item_cardapio_id) }}"
+              class="form-inline">
+          <button type="submit" class="btn-perigo">Remover</button>
+        </form>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p><strong>Total: R$ {{ "%.2f"|format(comanda.total) }}</strong></p>
+{% else %}
+  <p>Nenhum item na comanda.</p>
+{% endif %}
+
+<!-- Adicionar item -->
+{% if pode_editar %}
+<h3>Adicionar item</h3>
+<form method="POST" action="{{ url_for('comanda.adicionar_item', id=comanda.id) }}">
+  <select name="item_id" class="select-inline">
+    {% for item in itens_cardapio %}
+      {% if item.disponivel %}
+        <option value="{{ item.id }}">{{ item.nome }} — R$ {{ "%.2f"|format(item.preco) }}</option>
+      {% endif %}
+    {% endfor %}
+  </select>
+  <input type="number" name="quantidade" value="1" min="1" class="input-qtd">
+  <button type="submit">Adicionar</button>
+</form>
+{% endif %}
+
+<!-- Fechar comanda (atendente e admin, só se aberta) -->
+{% if comanda.estado == 'aberta' and current_user.papel in ['atendente', 'admin'] %}
+<form method="POST" action="{{ url_for('comanda.fechar', id=comanda.id) }}" class="mt-2">
+  <button type="submit" class="btn btn-aviso">
+    Fechar Comanda
+  </button>
+</form>
+{% endif %}
+
+<!-- Liquidar pagamento (só admin, comanda fechada) -->
+{% if comanda.estado == 'fechada' and current_user.papel == 'admin' %}
+<form method="GET" action="{{ url_for('pagamento.liquidar', comanda_id=comanda.id) }}" class="mt-2">
+  <button type="submit" class="btn btn-sucesso">
+    Liquidar Pagamento
+  </button>
+</form>
+{% endif %}
+
+<!-- Comprovante (comanda já paga) -->
+{% if comanda.estado == 'paga' %}
+<a href="{{ url_for('pagamento.comprovante', comanda_id=comanda.id) }}" class="btn btn-info mt-1">
+  Ver Comprovante
+</a>
+{% endif %}
+
+<br><br>
+<a href="{{ url_for('comanda.index') }}">← Voltar para comandas</a>
+{% endblock %}

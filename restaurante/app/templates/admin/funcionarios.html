@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<h2>Funcionários</h2>
+<a href="{{ url_for('admin.novo_funcionario') }}">+ Novo Funcionário</a>
+
+<table class="tabela">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>E-mail</th>
+      <th>Papel</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for func in funcionarios %}
+    <tr>
+      <td>{{ func.nome }}</td>
+      <td>{{ func.email }}</td>
+      <td>{{ func.papel }}</td>
+      <td>
+        <a href="{{ url_for('admin.editar_funcionario', id=func.id) }}">Editar</a>
+        <form method="POST" action="{{ url_for('admin.remover_funcionario', id=func.id) }}"
+              class="form-inline ml-1">
+          <button type="submit" class="btn-perigo"
+                  onclick="return confirm('Remover funcionário?')">Remover</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

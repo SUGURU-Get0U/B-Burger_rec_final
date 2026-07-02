@@ -1,0 +1,14 @@
+{% extends "base.html" %} {% block conteudo %}
+<h2 class="login_form_title">Login</h2>
+<form method="POST" action="{{ url_for('auth.login') }}" class="login_form">
+  <div class="campo">
+    <label>E-mail</label>
+    <input type="email" name="email" required autofocus class="input" />
+  </div>
+  <div class="campo">
+    <label>Senha</label>
+    <input type="password" name="senha" required class="input" />
+  </div>
+  <button type="submit" class="btn btn-primary">Entrar</button>
+</form>
+{% endblock %}

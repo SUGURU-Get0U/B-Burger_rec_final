@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<h2>{{ titulo }}</h2>
+<form method="POST" action="{{ action }}">
+  <div class="campo">
+    <label>Nome</label>
+    <input type="text" name="nome" value="{{ item.nome if item else '' }}" required class="input">
+  </div>
+  <div class="campo">
+    <label>Descrição</label>
+    <input type="text" name="descricao" value="{{ item.descricao if item else '' }}" class="input">
+  </div>
+  <div class="campo">
+    <label>Preço (R$)</label>
+    <input type="number" name="preco" step="0.01" min="0"
+           value="{{ item.preco if item else '' }}" required class="input-curto">
+  </div>
+  <div class="campo">
+    <label>
+      <input type="checkbox" name="disponivel" {{ 'checked' if (item and item.disponivel) else '' }}>
+      Disponível no cardápio
+    </label>
+  </div>
+  <button type="submit" class="btn btn-primary">Salvar</button>
+  <a href="{{ url_for('admin.cardapio') }}" class="ml-2">Cancelar</a>
+</form>
+{% endblock %}

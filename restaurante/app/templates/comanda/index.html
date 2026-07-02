@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<h2>Comandas</h2>
+
+<form method="POST" action="{{ url_for('comanda.nova') }}" class="mb-2">
+  <button type="submit">+ Nova Comanda</button>
+</form>
+
+{% if comandas %}
+<table class="tabela">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Estado</th>
+      <th>Itens</th>
+      <th>Total</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for comanda in comandas %}
+    <tr>
+      <td>{{ comanda.codigo }}</td>
+      <td>{{ comanda.estado }}</td>
+      <td>{{ comanda.itens|length }}</td>
+      <td>R$ {{ "%.2f"|format(comanda.total) }}</td>
+      <td>
+        <a href="{{ url_for('comanda.detalhe', id=comanda.id) }}">Ver</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p>Nenhuma comanda encontrada.</p>
+{% endif %}
+{% endblock %}

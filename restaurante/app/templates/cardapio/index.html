@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<h2>Cardápio</h2>
+
+<table class="tabela">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Descrição</th>
+      <th>Preço</th>
+      <th>Disponível</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in itens %}
+    <tr>
+      <td>{{ item.nome }}</td>
+      <td>{{ item.descricao }}</td>
+      <td>R$ {{ "%.2f"|format(item.preco) }}</td>
+      <td>
+        {% if item.disponivel %}
+          <span class="texto-sucesso">Sim</span>
+        {% else %}
+          <span class="texto-mutado">Indisponível</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

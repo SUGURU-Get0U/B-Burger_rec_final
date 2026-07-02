@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<h2>Cardápio (Admin)</h2>
+<a href="{{ url_for('admin.novo_item') }}">+ Novo Item</a>
+
+<table class="tabela">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Descrição</th>
+      <th>Preço</th>
+      <th>Disponível</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in itens %}
+    <tr>
+      <td>{{ item.nome }}</td>
+      <td>{{ item.descricao }}</td>
+      <td>R$ {{ "%.2f"|format(item.preco) }}</td>
+      <td>{{ 'Sim' if item.disponivel else 'Não' }}</td>
+      <td>
+        <a href="{{ url_for('admin.editar_item_cardapio', id=item.id) }}">Editar</a>
+        <form method="POST" action="{{ url_for('admin.remover_item_cardapio', id=item.id) }}"
+              class="form-inline ml-1">
+          <button type="submit" class="btn-perigo"
+                  onclick="return confirm('Remover item?')">Remover</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
